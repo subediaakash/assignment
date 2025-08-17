@@ -13,3 +13,149 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model ScrapedWebsite {
+  id        String   @id @default(cuid())
+  url       String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations to all scraped data
+  products           Product[]
+  heroProducts       HeroProduct[]
+  privacyPolicy      PrivacyPolicy?
+  returnRefundPolicy ReturnRefundPolicy?
+  faqs               FAQ[]
+  socialHandles      SocialHandles?
+  contactDetails     ContactDetails?
+  brandContext       BrandContext?
+  importantLinks     ImportantLinks?
+  blogPosts          BlogPost[]
+
+  @@map("scraped_websites")
+}
+
+model Product {
+  id        String   @id @default(cuid())
+  name      String
+  websiteId String
+  createdAt DateTime @default(now())
+
+  website ScrapedWebsite @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+
+  @@map("products")
+}
+
+model HeroProduct {
+  id        String   @id @default(cuid())
+  name      String
+  websiteId String
+  createdAt DateTime @default(now())
+
+  website ScrapedWebsite @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+
+  @@map("hero_products")
+}
+
+model PrivacyPolicy {
+  id        String   @id @default(cuid())
+  url       String
+  content   String?  @db.Text
+  websiteId String   @unique
+  createdAt DateTime @default(now())
+
+  website ScrapedWebsite @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+
+  @@map("privacy_policies")
+}
+
+model ReturnRefundPolicy {
+  id        String   @id @default(cuid())
+  url       String
+  content   String?  @db.Text
+  websiteId String   @unique
+  createdAt DateTime @default(now())
+
+  website ScrapedWebsite @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+
+  @@map("return_refund_policies")
+}
+
+model FAQ {
+  id        String   @id @default(cuid())
+  question  String   @db.Text
+  answer    String   @db.Text
+  websiteId String
+  createdAt DateTime @default(now())
+
+  website ScrapedWebsite @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+
+  @@map("faqs")
+}
+
+model SocialHandles {
+  id        String   @id @default(cuid())
+  instagram String?
+  facebook  String?
+  tiktok    String?
+  twitter   String?
+  youtube   String?
+  websiteId String   @unique
+  createdAt DateTime @default(now())
+
+  website ScrapedWebsite @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+
+  @@map("social_handles")
+}
+
+model ContactDetails {
+  id                 String   @id @default(cuid())
+  emails             String[]
+  phoneNumbers       String[]
+  contactPageContent String?  @db.Text
+  websiteId          String   @unique
+  createdAt          DateTime @default(now())
+
+  website ScrapedWebsite @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+
+  @@map("contact_details")
+}
+
+model BrandContext {
+  id        String   @id @default(cuid())
+  content   String   @db.Text
+  websiteId String   @unique
+  createdAt DateTime @default(now())
+
+  website ScrapedWebsite @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+
+  @@map("brand_contexts")
+}
+
+model ImportantLinks {
+  id            String   @id @default(cuid())
+  orderTracking String?
+  contactUs     String?
+  blogs         String?
+  shipping      String?
+  sizeGuide     String?
+  websiteId     String   @unique
+  createdAt     DateTime @default(now())
+
+  website ScrapedWebsite @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+
+  @@map("important_links")
+}
+
+model BlogPost {
+  id        String   @id @default(cuid())
+  title     String
+  url       String
+  excerpt   String?  @db.Text
+  websiteId String
+  createdAt DateTime @default(now())
+
+  website ScrapedWebsite @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+
+  @@map("blog_posts")
+}
