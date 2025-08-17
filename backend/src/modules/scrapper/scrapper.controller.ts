@@ -5,8 +5,15 @@ import type { Request, Response } from "express";
 export class ScrapperController {
   static async scrape(req: Request, res: Response): Promise<void> {
     const { url } = req.body;
+    const userId = req.user?.id;
+
     if (!url) {
       res.status(400).json({ error: "URL is required" });
+      return;
+    }
+
+    if (!userId) {
+      res.status(401).json({ error: "User authentication required" });
       return;
     }
 
@@ -16,7 +23,8 @@ export class ScrapperController {
 
       const savedWebsite = await ScrapperDatabase.saveScrapedData(
         url,
-        scrapedData
+        scrapedData,
+        userId
       );
 
       res.status(200).json({
@@ -36,15 +44,22 @@ export class ScrapperController {
 
   static async getScrapedData(req: Request, res: Response): Promise<void> {
     const { url } = req.params;
+    const userId = req.user?.id;
 
     if (!url) {
       res.status(400).json({ error: "URL parameter is required" });
       return;
     }
 
+    if (!userId) {
+      res.status(401).json({ error: "User authentication required" });
+      return;
+    }
+
     try {
       const scrapedData = await ScrapperDatabase.getScrapedData(
-        decodeURIComponent(url)
+        decodeURIComponent(url),
+        userId
       );
 
       if (!scrapedData) {
@@ -69,8 +84,15 @@ export class ScrapperController {
     req: Request,
     res: Response
   ): Promise<void> {
+    const userId = req.user?.id;
+
+    if (!userId) {
+      res.status(401).json({ error: "User authentication required" });
+      return;
+    }
+
     try {
-      const websites = await ScrapperDatabase.getAllScrapedWebsites();
+      const websites = await ScrapperDatabase.getAllScrapedWebsites(userId);
 
       res.status(200).json({
         success: true,

@@ -14,11 +14,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id             String           @id @default(cuid())
+  email          String           @unique
+  password       String
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  ScrapedWebsite ScrapedWebsite[]
+
+  @@map("users")
+}
+
 model ScrapedWebsite {
   id        String   @id @default(cuid())
   url       String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // Relations to all scraped data
   products           Product[]
@@ -159,3 +172,5 @@ model BlogPost {
 
   @@map("blog_posts")
 }
+
+// this is done by aakash subedi , if somebody else has copied please dont do it 

@@ -43,20 +43,30 @@ interface ScrapedData {
 }
 
 export class ScrapperDatabase {
-  static async saveScrapedData(url: string, scrapedData: ScrapedData) {
+  static async saveScrapedData(
+    url: string,
+    scrapedData: ScrapedData,
+    userId: string
+  ) {
     try {
-      // Check if website already exists
-      let website = await prisma.scrapedWebsite.findUnique({
-        where: { url },
+      // Check if website already exists for this user
+      let website = await prisma.scrapedWebsite.findFirst({
+        where: {
+          url,
+          userId,
+        },
       });
 
       if (website) {
         // Delete existing related data to update with fresh scrape
         await this.deleteExistingData(website.id);
       } else {
-        // Create new website record
+        // Create new website record associated with user
         website = await prisma.scrapedWebsite.create({
-          data: { url },
+          data: {
+            url,
+            userId,
+          },
         });
       }
 
@@ -268,9 +278,12 @@ export class ScrapperDatabase {
     }
   }
 
-  static async getScrapedData(url: string) {
-    return await prisma.scrapedWebsite.findUnique({
-      where: { url },
+  static async getScrapedData(url: string, userId: string) {
+    return await prisma.scrapedWebsite.findFirst({
+      where: {
+        url,
+        userId,
+      },
       include: {
         products: true,
         heroProducts: true,
@@ -286,8 +299,9 @@ export class ScrapperDatabase {
     });
   }
 
-  static async getAllScrapedWebsites() {
+  static async getAllScrapedWebsites(userId: string) {
     return await prisma.scrapedWebsite.findMany({
+      where: { userId },
       include: {
         products: true,
         heroProducts: true,

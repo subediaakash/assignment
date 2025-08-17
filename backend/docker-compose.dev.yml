@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgres:13
-    container_name: scrapper_postgres_db
+    container_name: scrapper_postgres_dev
     restart: unless-stopped
     ports:
       - '5432:5432'
@@ -10,7 +10,7 @@ services:
       POSTGRES_USER: scrapper_user
       POSTGRES_PASSWORD: scrapper_password
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data_dev:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U scrapper_user -d scrapper_db"]
       interval: 10s
@@ -18,24 +18,26 @@ services:
       retries: 5
 
   backend:
-    build: .
-    container_name: scrapper_backend
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: scrapper_backend_dev
     restart: unless-stopped
     ports:
       - '3000:3000'
     environment:
       DATABASE_URL: "postgresql://scrapper_user:scrapper_password@postgres:5432/scrapper_db"
-      JWT_SECRET: "your-super-secret-jwt-key-change-this-in-production"
+      JWT_SECRET: "dev-jwt-secret-key"
       JWT_EXPIRES_IN: "7d"
       PORT: 3000
-      NODE_ENV: production
+      NODE_ENV: development
     depends_on:
       postgres:
         condition: service_healthy
     volumes:
       - .:/app
       - /app/node_modules
-    command: sh -c "bunx prisma migrate deploy && bun run start"
+    command: sh -c "bunx prisma migrate deploy && bun run dev"
 
 volumes:
-  postgres_data:
+  postgres_data_dev: 

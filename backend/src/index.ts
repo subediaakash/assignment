@@ -1,6 +1,7 @@
 import express from "express";
 import morgan from "morgan";
 import { scrappingRouter } from "./modules/scrapper/scrapper.route";
+import { authRouter } from "./modules/auth/auth.route";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -10,7 +11,11 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(morgan("dev"));
 
-app.use("/api/v1", scrappingRouter);
+// Auth routes
+app.use("/api/v1/auth", authRouter);
+
+// Scrapper routes (protected)
+app.use("/api/v1/scrapper", scrappingRouter);
 app.get("/health-check", (req, res) => {
   res.send("Welcome to the Scrapper API");
 });

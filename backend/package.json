@@ -3,6 +3,10 @@
   "module": "index.ts",
   "type": "module",
   "private": true,
+  "scripts": {
+    "start": "bun run src/index.ts",
+    "dev": "bun --watch src/index.ts"
+  },
   "devDependencies": {
     "@types/bun": "latest",
     "prisma": "^6.14.0"
@@ -12,14 +16,19 @@
   },
   "dependencies": {
     "@prisma/client": "^6.14.0",
+    "@types/bcryptjs": "^3.0.0",
     "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/morgan": "^1.9.10",
     "axios": "^1.11.0",
     "axios-retry": "^4.5.0",
+    "bcryptjs": "^3.0.2",
     "cheerio": "^1.1.2",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.1",
     "scrapfly-sdk": "^0.6.9"
-  }
+  },
+  "packageManager": "pnpm@10.12.1+sha512.f0dda8580f0ee9481c5c79a1d927b9164f2c478e90992ad268bbb2465a736984391d6333d2c327913578b2804af33474ca554ba29c04a8b13060a717675ae3ac"
 }
