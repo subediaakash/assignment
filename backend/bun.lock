@@ -4,6 +4,7 @@
     "": {
       "name": "backend",
       "dependencies": {
+        "@prisma/client": "^6.14.0",
         "@types/express": "^5.0.3",
         "@types/morgan": "^1.9.10",
         "axios": "^1.11.0",
@@ -27,6 +28,8 @@
     "@deno/shim-deno": ["@deno/shim-deno@0.18.2", "", { "dependencies": { "@deno/shim-deno-test": "^0.5.0", "which": "^4.0.0" } }, "sha512-oQ0CVmOio63wlhwQF75zA4ioolPvOwAoK0yuzcS5bDC1JUvH3y1GS8xPh8EOpcoDQRU4FTG8OQfxhpR+c6DrzA=="],
 
     "@deno/shim-deno-test": ["@deno/shim-deno-test@0.5.0", "", {}, "sha512-4nMhecpGlPi0cSzT67L+Tm+GOJqvuk8gqHBziqcUQOarnuIax1z96/gJHCSIz2Z0zhxE6Rzwb3IZXPtFh51j+w=="],
+
+    "@prisma/client": ["@prisma/client@6.14.0", "", { "peerDependencies": { "prisma": "*", "typescript": ">=5.1.0" }, "optionalPeers": ["prisma", "typescript"] }, "sha512-8E/Nk3eL5g7RQIg/LUj1ICyDmhD053STjxrPxUtCRybs2s/2sOEcx9NpITuAOPn07HEpWBfhAVe1T/HYWXUPOw=="],
 
     "@prisma/config": ["@prisma/config@6.14.0", "", { "dependencies": { "c12": "3.1.0", "deepmerge-ts": "7.1.5", "effect": "3.16.12", "empathic": "2.0.0" } }, "sha512-IwC7o5KNNGhmblLs23swnfBjADkacBb7wvyDXUWLwuvUQciKJZqyecU0jw0d7JRkswrj+XTL8fdr0y2/VerKQQ=="],
 
