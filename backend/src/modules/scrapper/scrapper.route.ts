@@ -22,5 +22,3 @@ scrappingRouter.get(
   authMiddleware,
   ScrapperController.getAllScrapedWebsites.bind(ScrapperController)
 );
-
-// work done and subbmitted by : contact.aakash77@gmail.com , please dont copy
